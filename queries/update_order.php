@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $status = filter_input(INPUT_POST, 'status', FILTER_SANITIZE_STRING);
     $ordered_quantity = filter_input(INPUT_POST, 'ordered_quantity', FILTER_SANITIZE_STRING);
 
-    if($status == "APPROVED"){
-            $currentProduct = $product->find($product_id);
+    if($status == "CLAIMED"){
+        $currentProduct = $product->find($product_id);
         $currentProductQty = $currentProduct->qty;
         
         $orderedProduct =  $order->find($order_id);
@@ -31,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }else{
             $currentProductQty = $currentProductQty - $orderedProductQty;
         }
-
     }
 
     try {
@@ -43,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $orderStmt->bindParam(':order_id', $order_id);
         $orderStmt->execute();
 
-        if($status == "APPROVED"){
+        if($status == "CLAIMED"){
             // Update product Value;
             $productStmt = $product->pdo->prepare("UPDATE product SET qty = :currentProductQty WHERE id = :product_id");
              // Bind parameters to your SQL statement
@@ -52,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $productStmt->execute();
 
             //Add value in Product Transaction history
-
             $type = "OUT";
             $prodTransactionStmt = $product_transaction->pdo->prepare("INSERT INTO product_transactions (type, order_id, created_at, updated_at ) VALUES (:type, :order_id, :today, :today)");
             $prodTransactionStmt->bindParam(':type', $type);
@@ -62,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         }
 
-        echo "<script>alert('Status has been Updated !'); window.location='../orders.php';</script>";
+        echo "<script>alert('Status has been Updated !'); window.location='../approved_products.php';</script>";
 
     } catch (\PDOException  $e) {
         // die('Database connection error: ' . $e->getMessage());

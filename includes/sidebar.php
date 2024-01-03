@@ -23,6 +23,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="approved_products.php">
+                        <i class='bx bx-store'></i>
+                        <span class="links_name">Approved Product</span>
+                    </a>
+                </li>
+                <li>
                     <a href="generateBar.php">
                         <i class='bx bx-barcode-scanner' ></i>
                         <span class="links_name">Generate Barcode</span>

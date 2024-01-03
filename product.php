@@ -88,20 +88,6 @@ $result = $conn->query($sql);
                         <?php } ?>
                     
 
-                  
-      
-          
-          <form action="useProduct.php" method="post">
-          <h2>Release Product </h2>
-              <label for="barcodeId">Barcode:</label>
-              <input type="number" name="barcodeId" id="barcodeId" required>
-
-              <label for="qty">Quantity:</label>
-              <input type="number" id="qty" name="qty" min="1" required>
-
-              <input type="submit" value="Use Product">
-          </form>
-      
     
                 
             </div>

@@ -18,18 +18,29 @@
     </nav>
     <div class="container">
       <div class="form-container left">
-          <h2>Update Product </h2>
-          <form action="updateProduct.php" method="post">
+        <h2>Update Product </h2>
+        <form action="updateProduct.php" method="post" onsubmit="return confirmSubmit()">
 
-              <label for="barcodeId">Barcode:</label>
-              <input type="text" name="barcodeId" id="barcodeId" required>
+            <label for="barcodeId">Barcode:</label>
+            <input type="text" name="barcodeId" id="barcodeId" required>
 
-              <label for="qty">Quantity:</label>
-              <input type="number" id="qty" name="qty" min="1" required>
+            <label for="qty">Quantity:</label>
+            <input type="number" id="qty" name="qty" min="1" required>
+            <input type="submit" value="Update Product">
+        </form>
+    </div> 
 
-              <input type="submit" value="Update Product">
-          </form>
-      </div> 
+    <script>
+      function confirmSubmit() {
+          var r = confirm("Are you sure you want to submit?");
+          if (r == true) {
+              return true;
+          } else {
+              return false;
+          }
+    }
+    </script>
+
     </div>
     <?php
 $servername = "localhost";

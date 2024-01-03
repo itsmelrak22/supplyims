@@ -21,110 +21,112 @@
     </nav>
 
 <div class="container">
-    <div class="form-container left">
-        <h2>Order Form</h2>
-        <form class="order-form" action="queries/create_order.php" method="post">
-            <div id="submit_btn" style="display: none;">
-                <input type="submit" value="Submit">
-            </div>
-            <div id="dynamicForm">
-                <fieldset id="fieldSet1" class="fieldSet">
-                   
-                </fieldset>
-            </div>
-        </form>
+    <?php if( isset($_SESSION['user_data']->client_login) ) {?>   
+        <div class="form-container left">
+            <h2>Order Form</h2>
+            <form class="order-form" action="queries/create_order.php" method="post">
+                <div id="submit_btn" style="display: none;">
+                    <input type="submit" value="Submit">
+                </div>
+                <div id="dynamicForm">
+                    <fieldset id="fieldSet1" class="fieldSet">
+                    
+                    </fieldset>
+                </div>
+            </form>
 
-        <button onclick="addFieldSet()">Add Fields</button>
-        <button onclick="removeFieldSet()">Remove Fields</button>
+            <button onclick="addFieldSet()">Add Fields</button>
+            <button onclick="removeFieldSet()">Remove Fields</button>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-            let fieldSetCount = 0;
-            let productList = [];
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            <script>
+                let fieldSetCount = 0;
+                let productList = [];
 
-            function populateSelectDropdown(fieldSetCount) {
-                $.ajax({
-                    url: 'api/products.php',
-                    type: 'GET',
-                    success: function(response) {
-                        productList = [...response.data]
-                        productList.forEach(function(product) {
-                            var productNameSentenceCase = product.productName.charAt(0).toUpperCase() + product.productName.slice(1).toLowerCase();
-                            var optionText = productNameSentenceCase;
-                            $('#id_' + fieldSetCount).append(new Option(optionText, product.id));
-                            // $('#qty_' + fieldSetCount).val(product.qty);
-                        });
-                    }
-                });
-            }
-
-            function updateQtyOnChange(fieldSetCount) {
-                $('#id_' + fieldSetCount).on('change', function() {
-                    var selectedProductId = $(this).val();
-                    var selectedProduct = productList.find(function(product) {
-                        return product.id === selectedProductId;
+                function populateSelectDropdown(fieldSetCount) {
+                    $.ajax({
+                        url: 'api/products.php',
+                        type: 'GET',
+                        success: function(response) {
+                            productList = [...response.data]
+                            productList.forEach(function(product) {
+                                var productNameSentenceCase = product.productName.charAt(0).toUpperCase() + product.productName.slice(1).toLowerCase();
+                                var optionText = productNameSentenceCase;
+                                $('#id_' + fieldSetCount).append(new Option(optionText, product.id));
+                                // $('#qty_' + fieldSetCount).val(product.qty);
+                            });
+                        }
                     });
-                    console.log("selectedProduct", selectedProduct)
-                    if (selectedProduct) {
-                        $('#qty_' + fieldSetCount).val(selectedProduct.qty);
-                    }
-                });
-            }
-
-            $(document).ready(function() {
-                populateSelectDropdown(fieldSetCount);
-            });
-
-            function addFieldSet() {
-                fieldSetCount++;
-                var newFieldSet = document.createElement('fieldset');
-                newFieldSet.innerHTML = `
-                            <legend>Order Form ${fieldSetCount}</legend>
-                            <select id="id_${fieldSetCount}" name="id_${fieldSetCount}" placeholder="">
-                                <option selected readonly disabled> Select Product </option>
-                            </select required><br>
-                            <input type="text" id="quantity_${fieldSetCount}" name="quantity_${fieldSetCount}" placeholder="Quantity" required><br>
-                            <input type="text" id="office_${fieldSetCount}" name="office_${fieldSetCount}" placeholder="Office" required><br>
-                            <textarea id="remarks_${fieldSetCount}" name="remarks_${fieldSetCount}" placeholder="Remarks"></textarea><br>
-                            <label for="qty_${fieldSetCount}">Current Quantity</label>
-                            <input type="text" id="qty_${fieldSetCount}" name="qty_${fieldSetCount}" placeholder="Current Quantity" readonly ><br>
-                            <hr>
-                        `;
-
-                newFieldSet.id = 'fieldSet' + fieldSetCount;
-                newFieldSet.className = 'fieldSet';
-                document.getElementById('dynamicForm').appendChild(newFieldSet);
-
-                populateSelectDropdown(fieldSetCount);
-                updateQtyOnChange(fieldSetCount);
-
-                if( document.querySelector('#submit_btn') ){
-                    const submitBtn = document.querySelector('#submit_btn');
-                    if(fieldSetCount){
-                        submitBtn.style.display = 'block';
-                    }
                 }
-            }
 
-            function removeFieldSet() {
-                if (fieldSetCount > 0) {
-                    var fieldSetToRemove = document.getElementById('fieldSet' + fieldSetCount);
-                    document.getElementById('dynamicForm').removeChild(fieldSetToRemove);
-                    fieldSetCount--;
+                function updateQtyOnChange(fieldSetCount) {
+                    $('#id_' + fieldSetCount).on('change', function() {
+                        var selectedProductId = $(this).val();
+                        var selectedProduct = productList.find(function(product) {
+                            return product.id === selectedProductId;
+                        });
+                        console.log("selectedProduct", selectedProduct)
+                        if (selectedProduct) {
+                            $('#qty_' + fieldSetCount).val(selectedProduct.qty);
+                        }
+                    });
+                }
+
+                $(document).ready(function() {
+                    populateSelectDropdown(fieldSetCount);
+                });
+
+                function addFieldSet() {
+                    fieldSetCount++;
+                    var newFieldSet = document.createElement('fieldset');
+                    newFieldSet.innerHTML = `
+                                <legend>Order Form ${fieldSetCount}</legend>
+                                <select id="id_${fieldSetCount}" name="id_${fieldSetCount}" placeholder="">
+                                    <option selected readonly disabled> Select Product </option>
+                                </select required><br>
+                                <input type="text" id="quantity_${fieldSetCount}" name="quantity_${fieldSetCount}" placeholder="Quantity" required><br>
+                                <input type="text" id="office_${fieldSetCount}" name="office_${fieldSetCount}" placeholder="Office" required><br>
+                                <textarea id="remarks_${fieldSetCount}" name="remarks_${fieldSetCount}" placeholder="Remarks"></textarea><br>
+                                <label for="qty_${fieldSetCount}">Current Quantity</label>
+                                <input type="text" id="qty_${fieldSetCount}" name="qty_${fieldSetCount}" placeholder="Current Quantity" readonly ><br>
+                                <hr>
+                            `;
+
+                    newFieldSet.id = 'fieldSet' + fieldSetCount;
+                    newFieldSet.className = 'fieldSet';
+                    document.getElementById('dynamicForm').appendChild(newFieldSet);
+
+                    populateSelectDropdown(fieldSetCount);
+                    updateQtyOnChange(fieldSetCount);
 
                     if( document.querySelector('#submit_btn') ){
                         const submitBtn = document.querySelector('#submit_btn');
-                        if(!fieldSetCount){
-                            submitBtn.style.display = 'none';
+                        if(fieldSetCount){
+                            submitBtn.style.display = 'block';
                         }
                     }
                 }
-            }
-        </script>
+
+                function removeFieldSet() {
+                    if (fieldSetCount > 0) {
+                        var fieldSetToRemove = document.getElementById('fieldSet' + fieldSetCount);
+                        document.getElementById('dynamicForm').removeChild(fieldSetToRemove);
+                        fieldSetCount--;
+
+                        if( document.querySelector('#submit_btn') ){
+                            const submitBtn = document.querySelector('#submit_btn');
+                            if(!fieldSetCount){
+                                submitBtn.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+            </script>
 
 
 
-    </div>
+        </div>
+    <?php }?>
 
     <div class="product-container">
         <table border="1">

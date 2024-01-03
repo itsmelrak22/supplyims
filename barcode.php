@@ -20,8 +20,7 @@
     <div class="container">
       <div class="form-container left">
           <h2>Add Product </h2>
-          <form action="addProduct.php" method="post">
-
+          <form action="addProduct.php" method="post"  onsubmit="return confirmSubmit()">
             <label for="barcodeId">Barcode:</label>
             <input type="text" name="barcodeId" id="barcodeId" required>
 
@@ -37,6 +36,18 @@
             <input type="submit" value="Add Product">
         </form>
       </div>
+
+      <script>
+      function confirmSubmit() {
+          var r = confirm("Are you sure you want to submit?");
+          if (r == true) {
+              return true;
+          } else {
+              return false;
+          }
+    }
+    </script>
+
 
       <div class="product-container">
         <h2>Product Information</h2>
