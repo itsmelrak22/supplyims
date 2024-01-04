@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Connect to the database
-     // $conn = new mysqli("localhost", "root", "", "inventory");
-    $conn = new mysqli("localhost", "root", "admin", "inventory");
+    // $conn = new mysqli("localhost", "root", "admin", "inventory"); //localDatabase
+    $conn = new mysqli("localhost", "u542620504_supplyimsAdmin", "Supplyinformationsystem@2024", "u542620504_supplyims"); //devsiteDatabase
 
     // Check the connection
     if ($conn->connect_error) {
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Execute the statement
         if ($stmt->execute()) {
-            echo "<script>alert('Registration successful!'); window.location='http://localhost/CAPSTONE';</script>";
+            echo "<script>alert('Registration successful!'); window.location='index.php';</script>";
             exit(); 
         } else {
             echo "<script>alert('Registration failed. Please try again later'); window.location='setting.php';</script>";

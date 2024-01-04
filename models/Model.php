@@ -8,12 +8,18 @@ class Model
     protected $username = "root";
     protected $password = "admin";
 
+    protected $dev_host = "localhost";
+    protected $dev_database = "u542620504_supplyims";
+    protected $dev_username = "u542620504_supplyimsAdmin";
+    protected $dev_password = "Supplyinformationsystem@2024";
+
     public $pdo;
     public $stmt;
     public $qry;
 
     public function __construct(){
-        $this->connect();
+        $this->connect(); //localDatabase
+        $this->connectToDevSite(); //devsiteDatabase
     }
     
     public function connect(){
@@ -27,7 +33,7 @@ class Model
         }
     }
 
-    public function connectToStage(){
+    public function connectToDevSite(){
         try {
             $this->pdo = new PDO("mysql:host={$this->stageHost};dbname={$this->stageDatabase};charset=utf8", $this->stageUsername, $this->stagePassword);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

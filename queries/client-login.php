@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             echo "<script>alert('Client Login Successfully !'); window.location='../clients.php';</script>";
         }else {
-            echo "<script>alert('Login failed. Check your employee id and password.'); window.location='http://localhost/CAPSTONE';</script>";
+            echo "<script>alert('Login failed. Check your employee id and password.'); window.location='../index.php';</script>";
 
         }
 }

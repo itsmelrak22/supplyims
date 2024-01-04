@@ -7,8 +7,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
 
     // Connect to the database
-    //  // $conn = new mysqli("localhost", "root", "", "inventory");
-    $conn = new mysqli("localhost", "root", "admin", "inventory");
+    // $conn = new mysqli("localhost", "root", "admin", "inventory"); //localDatabase
+    $conn = new mysqli("localhost", "u542620504_supplyimsAdmin", "Supplyinformationsystem@2024", "u542620504_supplyims"); //devsiteDatabase
 
     // Check the connection
     if ($conn->connect_error) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "<script>alert('Login successful!'); window.location='product.php';</script>";
         exit(); // Ensure that no other code is executed after the redirect
     } else {
-        echo "<script>alert('Login failed. Check your username and password.'); window.location='http://localhost/CAPSTONE';</script>";
+        echo "<script>alert('Login failed. Check your username and password.'); window.location='index.php';</script>";
         exit(); // Ensure that no other code is executed after the redirect
     }
 
