@@ -68,7 +68,7 @@
                          console.log('productList', productList)
 
                         var selectedProduct = productList.find(function(product) {
-                            return product.id === selectedProductId;
+                            return +product.id === +selectedProductId;
                         });
                         console.log("selectedProduct", selectedProduct)
                         if (selectedProduct) {
