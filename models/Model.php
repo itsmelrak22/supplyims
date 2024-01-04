@@ -35,7 +35,7 @@ class Model
 
     public function connectToDevSite(){
         try {
-            $this->pdo = new PDO("mysql:host={$this->stageHost};dbname={$this->stageDatabase};charset=utf8", $this->stageUsername, $this->stagePassword);
+            $this->pdo = new PDO("mysql:host={$this->dev_host};dbname={$this->dev_database};charset=utf8", $this->dev_username, $this->dev_password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
             
