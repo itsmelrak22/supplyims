@@ -60,8 +60,13 @@
                 }
 
                 function updateQtyOnChange(fieldSetCount) {
+                    console.log('fieldSetCount', fieldSetCount)
                     $('#id_' + fieldSetCount).on('change', function() {
                         var selectedProductId = $(this).val();
+
+                         console.log('selectedProductId', selectedProductId)
+                         console.log('productList', productList)
+
                         var selectedProduct = productList.find(function(product) {
                             return product.id === selectedProductId;
                         });
