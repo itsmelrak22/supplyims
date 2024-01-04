@@ -18,7 +18,7 @@ class Model
     public $qry;
 
     public function __construct(){
-        $this->connect(); //localDatabase
+        // $this->connect(); //localDatabase
         $this->connectToDevSite(); //devsiteDatabase
     }
     
