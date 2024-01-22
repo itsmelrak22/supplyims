@@ -133,7 +133,6 @@
         </div>
     <?php }?>
 
-    <div class="product-container">
         <table border="1">
             <tr>
                 <th>Product</th>
@@ -188,7 +187,6 @@
             </tr>
             <?php endforeach; ?>
         </table>
-    </div>
 
 </div>
 </section>
