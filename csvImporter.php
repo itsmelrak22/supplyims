@@ -43,6 +43,7 @@
   }
 
   function downloadFailedInsertsCSV(failedInserts) {
+    console.log('failedInserts', failedInserts)
       var headers = ["employee_id", "name", "contact", "error"];
 
       var csvContent = "data:text/csv;charset=utf-8,";
@@ -69,71 +70,72 @@
 </html>
 
 <?php
-if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
 
-  function generatePassword() {
-      $length = 8;
-      $charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      $password = "";
-      for ($i = 0; $i < $length; $i++) {
-          $random_picked = mt_rand(0, strlen($charset) - 1);
-          $password .= $charset[$random_picked];
-      }
-      return $password;
+function generatePassword() {
+  $length = 8;
+  $charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  $password = "";
+  for ($i = 0; $i < $length; $i++) {
+      $random_picked = mt_rand(0, strlen($charset) - 1);
+      $password .= $charset[$random_picked];
   }
+  return $password;
+}
 
-    // Connect to the database
-    include("connection.php");
-    include("send_email.php");
-    $today = date('Y-m-d H:i:s');
+  if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
+      // Connect to the database
+      include("connection.php");
+      include("send_email.php");
+      $today = date('Y-m-d H:i:s');
 
-    // Check if file was uploaded
-    if (isset($_FILES['csvFile'])) {
-        $file = $_FILES['csvFile']['tmp_name'];
+      // Check if file was uploaded
+      if (isset($_FILES['csvFile'])) {
+          $file = $_FILES['csvFile']['tmp_name'];
 
-        // Open the CSV file
-        if (($handle = fopen($file, "r")) !== FALSE) {
-            // Skip the first row (header)
-            fgetcsv($handle);
+          // Open the CSV file
+          if (($handle = fopen($file, "r")) !== FALSE) {
+              // Skip the first row (header)
+              fgetcsv($handle);
 
-            // Array for failed inserts
-            $failedInserts = array();
+              // Array for failed inserts
+              $failedInserts = array();
 
-            // Read each line of the CSV
-            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $employeeId = $data[0];
-                $password = generatePassword();
-                $name = $data[1];
-                $contact = $data[2];
+              // Read each line of the CSV
+              while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                  $employeeId = $data[0];
+                  $password = generatePassword();
+                  $name = $data[1];
+                  $contact = $data[2];
 
-                $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
+                  $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
 
-                if ($conn->query($sql) === TRUE) {
-                    sendEmployeeEmail($contact, $password, $name);
-                } else {
-                    // Add failed insert to array
-                    $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
-                }
-            }
+                  if ($conn->query($sql) === TRUE) {
+                      sendEmployeeEmail($contact, $password, $name);
+                  } else {
+                      // Add failed insert to array
+                      $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
+                  }
+              }
 
 
-            // Close the CSV file
-            fclose($handle);
-            
-            if(count($failedInserts) > 0){
-              echo "<script>";
-                echo "downloadFailedInsertsCSV(". json_encode($failedInserts) .");";
-              echo "</script>";
-            }else{
-              echo "<script>";
-                echo "alert('All New Accounts has been Created!')";
-              echo "</script>";
+              // Close the CSV file
+              fclose($handle);
+              
+              if(count($failedInserts) > 0){
+                echo "<script>";
+                  echo "alert('Some accounts failed to create!') \n";
+                  echo "downloadFailedInsertsCSV(". json_encode($failedInserts) .");";
+                echo "</script>";
+              }else{
+                echo "<script>";
+                  echo "alert('All New Accounts has been Created!')";
+                echo "</script>";
 
-            }
-        }
-    }
+              }
+          }
+      }
 
     // Close the database connection
     $conn->close();
-}
+  }
 ?>
