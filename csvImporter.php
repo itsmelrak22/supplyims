@@ -1,0 +1,133 @@
+<?php
+    include('includes/header.php');
+
+    if ( isset($_SESSION['user_data']) && isset($_SESSION['user_data']->client_login)  ){
+        header('Location: orders.php');
+    }
+?>
+
+<body>
+
+<?php include('includes/sidebar.php'); ?>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class='bx bx-menu sidebarBtn'></i>
+        <span class="dashboard">Setting</span>
+      </div>
+      
+    </nav>
+
+    <div class="home-content">
+      <div class="form-container">
+      <h2>EMPLOYEE CSV IMPORTER</h2>
+      <p>Please select a CSV file and click Upload:</p>
+
+      <form method="post" enctype="multipart/form-data">
+        <input type="file" id="csvFile" name="csvFile" accept=".csv">
+        <br><br>
+        <input type="submit" value="Upload CSV" name="submit">
+      </form>
+    </div><br>
+    </div>
+
+  <script>
+   let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".sidebarBtn");
+  sidebarBtn.onclick = function() {
+    sidebar.classList.toggle("active");
+    if(sidebar.classList.contains("active")){
+    sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+  }else
+    sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+  }
+
+  function downloadFailedInsertsCSV(failedInserts) {
+      var headers = ["employee_id", "password", "name", "contact", "error"];
+
+      // Sample data
+      // var data = [
+      //     ['12345678', generatePassword(), 'Kyla', 'magdaraogmariakyla@gmail.com'],
+      //     // ['0000001', generatePassword(), 'Kyla', 'magdaraogmariakyla@gmail.com'],
+      // ];
+
+      var csvContent = "data:text/csv;charset=utf-8,";
+
+      csvContent += headers.join(",") + "\r\n";
+
+      failedInserts.forEach(function(rowArray) {
+          csvContent += rowArray.join(",") + "\r\n";
+      });
+
+      var encodedUri = encodeURI(csvContent);
+      var link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `failed_inserts_${new Date().toLocaleDateString()}.csv`);
+      document.body.appendChild(link); // Required for Firefox
+
+      link.click(); 
+  }
+
+ </script>
+
+
+</body>
+</html>
+
+<?php
+if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
+    // Connect to the database
+    include("connection.php");
+    include("send_email.php");
+    $today = date('Y-m-d H:i:s');
+
+    // Check if file was uploaded
+    if (isset($_FILES['csvFile'])) {
+        $file = $_FILES['csvFile']['tmp_name'];
+
+        // Open the CSV file
+        if (($handle = fopen($file, "r")) !== FALSE) {
+            // Skip the first row (header)
+            fgetcsv($handle);
+
+            // Array for failed inserts
+            $failedInserts = array();
+
+            // Read each line of the CSV
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $employeeId = $data[0];
+                $password = $data[1];
+                $name = $data[2];
+                $contact = $data[3];
+
+                $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
+
+                if ($conn->query($sql) === TRUE) {
+                    sendEmployeeEmail($contact, $password, $name);
+                } else {
+                    // Add failed insert to array
+                    $failedInserts[] = array($employeeId, $password, $name, $contact, $conn->error);
+                }
+            }
+
+
+            // Close the CSV file
+            fclose($handle);
+            
+            if(count($failedInserts) > 0){
+              echo "<script>";
+                echo "downloadFailedInsertsCSV(". json_encode($failedInserts) .");";
+              echo "</script>";
+            }else{
+              echo "<script>";
+                echo "alert('All New Accounts has been Created!')";
+              echo "</script>";
+
+            }
+        }
+    }
+
+    // Close the database connection
+    $conn->close();
+}
+?>

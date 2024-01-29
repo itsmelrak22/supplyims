@@ -13,13 +13,13 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Add Product</span>
+        <span class="dashboard">Add Supply</span>
       </div>
       
     </nav>
     <div class="container">
       <div class="form-container left">
-          <h2>Add Product </h2>
+          <h2>Add Supply </h2>
           <form action="addProduct.php" method="post"  onsubmit="return confirmSubmit()">
             <label for="barcodeId">Barcode:</label>
             <input type="text" name="barcodeId" id="barcodeId" required>
@@ -50,12 +50,11 @@
 
 
       <div class="product-container">
-        <h2>Product Information</h2>
+        <h2>Supply Information</h2>
 <?php
 
 // Create connection
-    // $conn = new mysqli("localhost", "root", "admin", "inventory"); //localDatabase
-    $conn = new mysqli("localhost", "u542620504_supplyimsAdmin", "Supplyinformationsystem@2024", "u542620504_supplyims"); //devsiteDatabase
+    include("connection.php");
 
 // Check connection
 if ($conn->connect_error) {
@@ -78,8 +77,8 @@ if ($result->num_rows > 0) {
         <table>
             <tr>
                 <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Product Group</th>
+                <th>Supply Name</th>
+                <th>Category</th>
                 <th>Quantity</th>
                 <th>Date Created</th>
             </tr>
@@ -98,18 +97,7 @@ if ($result->num_rows > 0) {
     <?php endif; ?>
     
         <br>
-        <div class="bar-boxes">
-          <div class="recent-bar box">
-              <div class="bar-details">
-                <div class=></div>
-                <div class="button">
-                  <a href="#">Add</a>
-                  <a href="#">Remove</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    
     </div> 
      
   </div>

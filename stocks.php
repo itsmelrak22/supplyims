@@ -18,7 +18,7 @@
     </nav>
     <div class="container">
       <div class="form-container left">
-        <h2>Update Product </h2>
+        <h2>Update Stocks </h2>
         <form action="updateProduct.php" method="post" onsubmit="return confirmSubmit()">
 
             <label for="barcodeId">Barcode:</label>
@@ -46,8 +46,7 @@
 
 
 // Create connection
-    // $conn = new mysqli("localhost", "root", "admin", "inventory"); //localDatabase
-    $conn = new mysqli("localhost", "u542620504_supplyimsAdmin", "Supplyinformationsystem@2024", "u542620504_supplyims"); //devsiteDatabase
+include("connection.php");
 
 // Check connection
 if ($conn->connect_error) {
@@ -70,8 +69,8 @@ if ($result->num_rows > 0) {
         <table>
             <tr>
                 <th>Product ID</th>
-                <th>Product Name</th>
-                <th>Product Group</th>
+                <th>Supply Name</th>
+                <th>Category</th>
                 <th>Quantity</th>
                 <th>Date Created</th>
             </tr>

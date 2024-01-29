@@ -15,12 +15,11 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Add Clients</span>
+        <span class="dashboard">Approved Supply</span>
       </div>
     </nav>
 
 <div class="container">
-    <div class="product-container">
         <table border="1">
             <tr>
                 <th>Product</th>
@@ -45,7 +44,9 @@
                 <td><?= $order['office']; ?></td>
                 <td><?= ucwords($order['ordered_by_name']) ?></td>
                 <td><?= $order['remarks']; ?></td>
-                <td><?= $order['status']; ?></td>
+                <td><?= ucfirst(strtolower($order['status']));?></td>
+
+
                 <?php
                     if ( $adminLogin ){
                 ?>
@@ -70,7 +71,6 @@
             </tr>
             <?php endforeach; ?>
         </table>
-    </div>
 
 </div>
 </section>
