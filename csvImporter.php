@@ -109,6 +109,7 @@ function generatePassword() {
 
                   $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
                   $conn->query($sql);
+                  echo "$conn->insert_id";
                   if ($conn->insert_id) {
                       sendEmployeeEmail($contact, $password, $name);
                   } else {
