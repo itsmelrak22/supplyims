@@ -43,13 +43,7 @@
   }
 
   function downloadFailedInsertsCSV(failedInserts) {
-      var headers = ["employee_id", "password", "name", "contact", "error"];
-
-      // Sample data
-      // var data = [
-      //     ['12345678', generatePassword(), 'Kyla', 'magdaraogmariakyla@gmail.com'],
-      //     // ['0000001', generatePassword(), 'Kyla', 'magdaraogmariakyla@gmail.com'],
-      // ];
+      var headers = ["employee_id", "name", "contact", "error"];
 
       var csvContent = "data:text/csv;charset=utf-8,";
 
@@ -76,6 +70,18 @@
 
 <?php
 if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
+
+  function generatePassword() {
+      $length = 8;
+      $charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      $password = "";
+      for ($i = 0; $i < $length; $i++) {
+          $random_picked = mt_rand(0, strlen($charset) - 1);
+          $password .= $charset[$random_picked];
+      }
+      return $password;
+  }
+
     // Connect to the database
     include("connection.php");
     include("send_email.php");
@@ -96,9 +102,9 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
             // Read each line of the CSV
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 $employeeId = $data[0];
-                $password = $data[1];
-                $name = $data[2];
-                $contact = $data[3];
+                $password = generatePassword();
+                $name = $data[1];
+                $contact = $data[2];
 
                 $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
 
@@ -106,7 +112,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
                     sendEmployeeEmail($contact, $password, $name);
                 } else {
                     // Add failed insert to array
-                    $failedInserts[] = array($employeeId, $password, $name, $contact, $conn->error);
+                    $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
                 }
             }
 
