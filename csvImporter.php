@@ -114,6 +114,7 @@ function generatePassword() {
                   } else {
                       // Add failed insert to array
                       $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
+                      echo "console.log(". json_encode($failedInserts) .");";
                   }
               }
 
@@ -130,7 +131,6 @@ function generatePassword() {
                 echo "<script>";
                   echo "alert('All New Accounts has been Created!')";
                 echo "</script>";
-
               }
           }
       }
