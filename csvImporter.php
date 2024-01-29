@@ -83,9 +83,15 @@ function generatePassword() {
 }
 
   if (isset($_POST['submit']) && $_POST['submit'] == 'Upload CSV') {
+
+    spl_autoload_register(function ($class) {
+        include 'models/' . $class . '.php';
+    });
+  
       // Connect to the database
-      include("connection.php");
       include("send_email.php");
+      $instance = new Client;
+
       $today = date('Y-m-d H:i:s');
 
       // Check if file was uploaded
@@ -106,17 +112,28 @@ function generatePassword() {
                   $password = generatePassword();
                   $name = $data[1];
                   $contact = $data[2];
+                  try {
+                    $instance->setQuery("INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')");
+                    sendEmployeeEmail($contact, $password, $name);
 
-                  $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
-                  $result = $conn->insert_id;
-                  
-                  if ($result === TRUE) {
-                      echo $conn->insert_id;
-                      // sendEmployeeEmail($contact, $password, $name);
-                  } else {
-                      // Add failed insert to array
-                      $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
+                  } catch (PDOException $e) {
+                    $errorCode = (string) $e->getCode();
+                      switch($errorCode) {
+                          case '23000':
+                              $error = 'A duplicate entry error occurred (Employee ID).';
+                              break;
+                          case '42000':
+                              $error = 'A syntax error occurred in SQL statement.';
+                              break;
+                              // Add more cases as needed
+                          default:
+                              $error =  'An error occurred. Please try again later.';
+                      }
+                      $failedInserts[] = array($employeeId, $name, $contact, "SQL ERROR CODE[$errorCode] $error");
+
                   }
+
+
               }
 
 
@@ -136,7 +153,5 @@ function generatePassword() {
           }
       }
 
-    // Close the database connection
-    $conn->close();
   }
 ?>
