@@ -108,9 +108,10 @@ function generatePassword() {
                   $contact = $data[2];
 
                   $sql = "INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')";
-                  echo "$conn->query($sql)";
-                  if ($conn->insert_id) {
-                      sendEmployeeEmail($contact, $password, $name);
+                  
+                  if ($conn->query($sql)) {
+                      echo $conn->insert_id;
+                      // sendEmployeeEmail($contact, $password, $name);
                   } else {
                       // Add failed insert to array
                       $failedInserts[] = array($employeeId, $name, $contact, $conn->error);
