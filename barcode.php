@@ -3,6 +3,10 @@
     if ( isset($_SESSION['user_data']) && isset($_SESSION['user_data']->client_login)  ){
       header('Location: orders.php');
   }
+
+  $unit = new Unit;
+  $units = $unit->all();
+
 ?>
 
 <body>
@@ -32,6 +36,16 @@
 
             <label for="qty">Quantity:</label>
             <input type="number" name="qty" id="qty" required>
+
+            <label for="unit_id">Unit:</label>
+            <select name="unit_id" id="unit_id" >
+              <option selected readonly disabled required> Select Unit </option>
+              <?php
+                foreach ($units as $key => $value) {
+                  echo '<option value="'.$value['id'] .'">' .$value['name'] . ' (' .$value['short_name'] .')'. '</option>';
+                }
+              ?>
+            </select>
 
             <input type="submit" value="Add Product">
         </form>
@@ -63,7 +77,18 @@ if ($conn->connect_error) {
 ?>
 <?php
 // Fetch update history
-$sql = "SELECT barcodeId, productName, productGroup, qty ,created_at FROM product ORDER BY created_at DESC";
+$sql = "SELECT 
+        A.barcodeId, 
+        A.productName, 
+        A.productGroup, 
+        A.qty,
+        A.created_at, 
+        B.name as unit_name, 
+        B.short_name as unit_short_name 
+        FROM product AS A 
+        LEFT JOIN units AS B ON 
+        A.unit_id = B.id 
+        ORDER BY A.created_at DESC";
 $result = $conn->query($sql);
 
 // Check if there are results
@@ -80,15 +105,17 @@ if ($result->num_rows > 0) {
                 <th>Supply Name</th>
                 <th>Category</th>
                 <th>Quantity</th>
+                <th>Unit</th>
                 <th>Date Created</th>
             </tr>
             <?php foreach ($updateProduct as $update): ?>
                 <tr>
-                    <td><?php echo $update['barcodeId']; ?></td>
-                    <td><?php echo $update['productName']; ?></td>
-                    <td><?php echo $update['productGroup']; ?></td>
-                    <td><?php echo $update['qty']; ?></td>
-                    <td><?php echo $update['created_at']; ?></td>
+                    <td><?= $update['barcodeId']; ?></td>
+                    <td><?= $update['productName']; ?></td>
+                    <td><?= $update['productGroup']; ?></td>
+                    <td><?= $update['qty']; ?></td>
+                    <td><?= $update['unit_name']; ?> (<?= $update['unit_short_name']; ?>)</td>
+                    <td><?= $update['created_at']; ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -103,17 +130,16 @@ if ($result->num_rows > 0) {
   </div>
 
   <script>
-   let sidebar = document.querySelector(".sidebar");
-let sidebarBtn = document.querySelector(".sidebarBtn");
-sidebarBtn.onclick = function() {
-  sidebar.classList.toggle("active");
-  if(sidebar.classList.contains("active")){
-  sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
-}else
-  sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-}
-
- </script>
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+    }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
+  </script>
 
 </body>
 </html>

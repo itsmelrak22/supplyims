@@ -21,25 +21,35 @@
  
     <div class="report-content">
       <div class="sales-boxes">
-      <p>Start Date: <input type="text" id="startdate"></p>
-      <p>End Date: <input type="text" id="enddate"></p>
+
+      <div class="recent-sales box">
+          <div class="title">Import Product
+            <div class="sales-details">
+              <div class="">
+              <span>Start Date: <input type="text" id="startdate"></span>
+              <span>End Date: <input type="text" id="enddate"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
  
         <div class="recent-sales box">
           <div class="title">Import Product
             <div class="sales-details">
-              <div class=></div>
+              <div class=""></div>
               <div class="button" onclick="pdfGenerate('IN')">
                 <a >GENERATE</a>
               </div>
             </div>
           </div>
- 
         </div>
+
         <br>
         <div class="recent-sales box">
           <div class="title">Release Product
             <div class="sales-details">
-              <div class=></div>
+              <div class=""></div>
               <div class="button" onclick="pdfGenerate('OUT')">
               <a >GENERATE</a>
               </div>

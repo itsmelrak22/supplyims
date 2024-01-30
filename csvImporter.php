@@ -110,10 +110,11 @@ function generatePassword() {
               while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                   $employeeId = $data[0];
                   $password = generatePassword();
+                  $hashed_password = hash('sha256', $password);
                   $name = $data[1];
                   $contact = $data[2];
                   try {
-                    $instance->setQuery("INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$password', '$name', '$contact', '$today', '$today')");
+                    $instance->setQuery("INSERT INTO clients (`employee_id`, `password`, `name`, `contact`, `created_at`, `updated_at`) VALUES ('$employeeId', '$hashed_password', '$name', '$contact', '$today', '$today')");
                     sendEmployeeEmail($contact, $password, $name);
 
                   } catch (PDOException $e) {

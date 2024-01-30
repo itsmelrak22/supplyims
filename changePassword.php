@@ -1,66 +1,90 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate and sanitize user input
-    $username = htmlspecialchars($_POST['username']);
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
-    $npass = $_POST['npass'];
-    $rpass = $_POST['rpass'];
+    include('includes/header.php');
+    $adminLogin = isset($_SESSION['user_data']) && !isset($_SESSION['user_data']->client_login);
+    $id = $adminLogin ? $_SESSION['user_data']['id'] : $_SESSION['user_data']->id;
 
-    // Validate password match
-    if ($npass !== $rpass) {
-        echo "<script>alert('Error: Passwords do not match!'); window.location='setting.php';</script>";
-        exit(); 
+
+    if ( $adminLogin  ){
+        header('Location: orders.php');
+    }
+  
+?>
+
+<body>
+
+<?php include('includes/sidebar.php'); ?>
+  <section class="home-section">
+    <nav>
+      <div class="sidebar-button">
+        <i class='bx bx-menu sidebarBtn'></i>
+        <span class="dashboard">Setting</span>
+      </div>
+      
+    </nav>
+
+    <div class="home-content">
+      <div class="form-container">
+      <h2>CHANGE PASSWORD</h2>
+
+      <form  method="post" id="client_form">
+            <label for="new_password">New Password:</label>
+            <input type="password" name="new_password" id="new_password" required>
+
+            <label for="confirm_new_password">New Confirm Password:</label>
+            <input type="password" name="confirm_new_password" id="confirm_new_password" required>
+
+            <input type="submit" value="Submit" name="changePassword">
+        </form>
+    </div><br>
+    </div>
+
+  <script>
+   let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".sidebarBtn");
+  sidebarBtn.onclick = function() {
+    sidebar.classList.toggle("active");
+    if(sidebar.classList.contains("active")){
+    sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+  }else
+    sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+  }
+
+ </script>
+
+
+</body>
+</html>
+
+<?php
+
+if( isset($_POST['changePassword']) ){
+    // $old_password = filter_input(INPUT_POST, 'old_password', FILTER_SANITIZE_STRING);
+    $confirm_new_password = filter_input(INPUT_POST, 'confirm_new_password', FILTER_SANITIZE_STRING);
+    $new_password = filter_input(INPUT_POST, 'new_password', FILTER_SANITIZE_STRING);
+    $hashed_password = hash('sha256', $new_password);
+
+    if ($new_password != $confirm_new_password) {
+        echo "<script>alert('New Passwords do not match'); window.location='changePassword.php';</script>";
+        exit();
     }
 
-    // Connect to the database
-    include("connection.php");
 
-    // Check the connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+    try {
+        $instance = new Model;
+        $stmt = $instance->pdo->prepare("UPDATE clients SET password = :hashed_password WHERE id = :id");
+        // Bind parameters to your SQL statement
+        $stmt->bindParam(':hashed_password', $hashed_password);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        echo "<script>alert('User has been updated!'); window.location='orders.php';</script>";
+
+    } catch (\PDOException  $e) {
+        die('Database connection error: ' . $e->getMessage());
+        echo "<script>alert('Something Went Wrong !'); window.location='orders.php';</script>";
     }
 
-    // Check if the username already exists
-    $checkUsernameStmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
-    $checkUsernameStmt->bind_param("s", $username);
-    $checkUsernameStmt->execute();
-    $checkUsernameResult = $checkUsernameStmt->get_result();
 
-    if ($checkUsernameResult->num_rows != 1) {
-        echo "<script>alert('Error: Username doesn't exist!'); window.location='setting.php';</script>";
-        exit(); // Stop execution if the username doesn't exist
-    }
-
-    // Check if the email already exists
-    $checkEmailStmt = $conn->prepare("SELECT * FROM users WHERE email = ?");
-    $checkEmailStmt->bind_param("s", $email);
-    $checkEmailStmt->execute();
-    $checkEmailResult = $checkEmailStmt->get_result();
-
-    if ($checkEmailResult->num_rows != 1) {
-        echo "<script>alert('Error: Email doesn't exist!'); window.location='setting.php';</script>";
-        exit(); // Stop execution if the email doesn't exist
-    }
-
-    // Continue with the password change process
-
-    // Use prepared statements to prevent SQL injection
-    $updateStmt = $conn->prepare("UPDATE users SET password=? WHERE email=? AND username=?");
-    $updateStmt->bind_param("sss", $npass, $email, $username);
-
-    // Execute the statement
-    if ($updateStmt->execute()) {
-        echo "<script>alert('Change password successful!'); window.location='setting.php';</script>";
-        exit(); // Ensure that no other code is executed after the redirect
-    } else {
-        echo "<script>alert('Changing password failed. Please try again later.'); window.location='setting.php';</script>";
-    }
-
-    // Close the statements and connection
-    $updateStmt->close();
-    $checkUsernameStmt->close();
-    $checkEmailStmt->close();
-    $conn->close();
 }
+
 ?>

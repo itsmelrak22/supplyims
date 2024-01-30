@@ -22,10 +22,10 @@
 <div class="container">
     <div class="form-container left">
           <h2>Add Client Info </h2>
-          <form action="queries/create_client.php" method="post">
+          <form action="queries/create_client.php" method="post" id="client_form">
 
             <label for="employee_id">Employee ID:</label>
-            <input type="text" name="employee_id" id="employee_id" required>
+            <input type="number" name="employee_id" id="employee_id" required>
 
             <label for="employee_name">Employee Name:</label>
             <input type="text" name="employee_name" id="employee_name" required>
@@ -36,8 +36,8 @@
             <label for="confirm-password">Confirm Password:</label>
             <input type="password" name="confirm-password" id="confirm-password" required>
 
-            <label for="contact">Contact No:</label>
-            <input type="text" name="contact" id="contact" required>
+            <label for="contact">Email:</label>
+            <input type="email" name="contact" id="contact" required>
 
             <input type="submit" value="Submit">
         </form>
@@ -73,8 +73,20 @@
 </div>
 </section>
 
+<script>
+    let sidebar = document.querySelector(".sidebar");
+    let sidebarBtn = document.querySelector(".sidebarBtn");
+    sidebarBtn.onclick = function() {
+      sidebar.classList.toggle("active");
+      if(sidebar.classList.contains("active")){
+      sidebarBtn.classList.replace("bx-menu" ,"bx-menu-alt-right");
+    }else
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
+  </script>
 
-
+<script>
+</script>
 
 
 </body>

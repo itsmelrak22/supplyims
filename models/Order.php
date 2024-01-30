@@ -10,13 +10,17 @@ Class Order extends Model {
                                     B.productName as product_name,
                                     B.barcodeId as barcode_id,
                                     B.qty as existing_qty,
-                                    C.name as ordered_by_name
+                                    C.name as ordered_by_name,
+                                    E.name as department_name,
+                                    E.short_name as department_short_name
                                     FROM `orders` as A
                                     LEFT JOIN `product` as B
                                     ON A.product_id = B.id
                                     LEFT JOIN `clients` as C
                                     ON A.ordered_by = C.id
                                     AND  A.deleted_at IS NULL
+                                    LEFT JOIN `departments` as E
+                                    ON A.department_id = E.id
                                     ORDER BY A.created_at DESC
                                     ")
                             ->getAll();
@@ -27,13 +31,17 @@ Class Order extends Model {
                                     B.productName as product_name,
                                     B.barcodeId as barcode_id,
                                     B.qty as existing_qty,
-                                    C.name as ordered_by_name
+                                    C.name as ordered_by_name,
+                                    E.name as department_name,
+                                    E.short_name as department_short_name
                                     FROM `orders` as A
                                     LEFT JOIN `product` as B
                                     ON A.product_id = B.id
                                     LEFT JOIN `clients` as C
                                     ON A.ordered_by = C.id
                                     AND  A.deleted_at IS NULL
+                                    LEFT JOIN `departments` as E
+                                    ON A.department_id = E.id
                                     WHERE A.status = 'APPROVED';
                                     ORDER BY A.created_at DESC
                                     ")
@@ -45,13 +53,17 @@ Class Order extends Model {
                                     B.productName as product_name,
                                     B.barcodeId as barcode_id,
                                     B.qty as existing_qty,
-                                    C.name as ordered_by_name
+                                    C.name as ordered_by_name,
+                                    E.name as department_name,
+                                    E.short_name as department_short_name
                                     FROM `orders` as A
                                     LEFT JOIN `product` as B
                                     ON A.product_id = B.id
                                     LEFT JOIN `clients` as C
                                     ON A.ordered_by = C.id
                                     AND  A.deleted_at IS NULL
+                                    LEFT JOIN `departments` as E
+                                    ON A.department_id = E.id
                                     WHERE C.id = $id
                                     ORDER BY A.created_at DESC
                                     ")

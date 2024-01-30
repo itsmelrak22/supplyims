@@ -1,35 +1,27 @@
+
+
 <?php
 session_start();
+date_default_timezone_set('Asia/Manila');
+
+spl_autoload_register(function ($class) {
+    include 'models/' . $class . '.php';
+});
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Connect to the database
-    include("connection.php");
+    $instance = new Model;
+    $stmt = $instance->pdo->prepare('SELECT password FROM users WHERE username = :username');
+    $stmt->execute(['username' => $username]); // replace with the provided username
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Check the connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
+    if ($row && hash('sha256', $password) === $row['password']) {
+        $employee = $instance->setQuery("SELECT * FROM users WHERE `username` = '$username' ")->getFirst();
 
-    // Use prepared statements to prevent SQL injection
-    $sql = "SELECT * FROM users WHERE username=? AND password=?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $username, $password);
-
-    // Execute the query
-    $stmt->execute();
-
-    // Get the result
-    $result = $stmt->get_result();
-
-    // Check if the user exists in the database
-    if ($result->num_rows > 0) {
-        $user_data = $result->fetch_assoc();
-        $_SESSION['user_data'] = $user_data;
-
+        $_SESSION['user_data'] = (array)$employee;
         echo "<script>alert('Login successful!'); window.location='product.php';</script>";
         exit(); // Ensure that no other code is executed after the redirect
     } else {
@@ -37,8 +29,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit(); // Ensure that no other code is executed after the redirect
     }
 
-    // Close the statement and connection
-    $stmt->close();
-    $conn->close();
 }
 ?>

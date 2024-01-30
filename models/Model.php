@@ -18,8 +18,8 @@ class Model
     public $qry;
 
     public function __construct(){
-        // $this->connect(); //localDatabase
-        $this->connectToDevSite(); //devsiteDatabase
+        $this->connect(); //localDatabase
+        // $this->connectToDevSite(); //devsiteDatabase
     }
     
     public function connect(){
@@ -107,5 +107,10 @@ class Model
     public function getLastInsertedId(){
         $data = $this->setQuery("SELECT LAST_INSERT_ID() as id")->getFirst();
         return (int) $data->id;
+    }
+
+    public function findNoSoftDelete($primaryKey){
+        $data = $this->setQuery("SELECT * FROM $this->table WHERE id = ? LIMIT 1", [$primaryKey])->getFirst();
+        return $data;
     }
 }

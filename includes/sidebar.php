@@ -68,9 +68,30 @@
                         <span class="links_name">CSV Importer</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="departments.php">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">Departments</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="units.php">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">Units</span>
+                    </a>
+                </li>
             
             
-            <?php }?>
+            <?php } else {?>
+                <li>
+                    <a href="changePassword.php">
+                        <i class='bx bx-box'></i>
+                        <span class="links_name">Change Password</span>
+                    </a>
+                </li>
+            <?php } ?>
 
 
 

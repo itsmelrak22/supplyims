@@ -42,6 +42,8 @@
             <script>
                 let fieldSetCount = 0;
                 let productList = [];
+                let departmentList = [];
+                let unitList = [];
 
                 function populateSelectDropdown(fieldSetCount) {
                     $.ajax({
@@ -58,6 +60,33 @@
                         }
                     });
                 }
+
+                function populateSelectDropdownDepartment(fieldSetCount) {
+                    $.ajax({
+                        url: 'api/getDepartments.php',
+                        type: 'GET',
+                        success: function(response) {
+                            departmentList = [...response.data]
+                            departmentList.forEach(function(department) {
+                                $('#office_' + fieldSetCount).append(new Option(department.short_name, department.id));
+                                // $('#qty_' + fieldSetCount).val(product.qty);
+                            });
+                        }
+                    });
+                }
+                // function populateSelectDropdownUnit(fieldSetCount) {
+                //     $.ajax({
+                //         url: 'api/getUnits.php',
+                //         type: 'GET',
+                //         success: function(response) {
+                //             unitList = [...response.data]
+                //             unitList.forEach(function(department) {
+                //                 $('#unit_' + fieldSetCount).append(new Option(department.short_name, department.id));
+                //                 // $('#qty_' + fieldSetCount).val(product.qty);
+                //             });
+                //         }
+                //     });
+                // }
 
                 function updateQtyOnChange(fieldSetCount) {
                     console.log('fieldSetCount', fieldSetCount)
@@ -79,29 +108,33 @@
 
                 $(document).ready(function() {
                     populateSelectDropdown(fieldSetCount);
+                    populateSelectDropdownDepartment(fieldSetCount);
                 });
 
                 function addFieldSet() {
                     fieldSetCount++;
-                    var newFieldSet = document.createElement('fieldset');
+                    var newFieldSet = document.createElement('fieldset');                    
                     newFieldSet.innerHTML = `
-                                <legend>Order Form ${fieldSetCount}</legend>
-                                <select id="id_${fieldSetCount}" name="id_${fieldSetCount}" placeholder="">
-                                    <option selected readonly disabled> Select Product </option>
-                                </select required><br>
-                                <input type="text" id="quantity_${fieldSetCount}" name="quantity_${fieldSetCount}" placeholder="Quantity" required><br>
-                                <input type="text" id="office_${fieldSetCount}" name="office_${fieldSetCount}" placeholder="Office" required><br>
-                                <textarea id="remarks_${fieldSetCount}" name="remarks_${fieldSetCount}" placeholder="Remarks"></textarea><br>
-                                <label for="qty_${fieldSetCount}">Current Quantity</label>
-                                <input type="text" id="qty_${fieldSetCount}" name="qty_${fieldSetCount}" placeholder="Current Quantity" readonly ><br>
-                                <hr>
-                            `;
+                        <legend>Order Form ${fieldSetCount}</legend>
+                        <select id="id_${fieldSetCount}" name="id_${fieldSetCount}" placeholder="">
+                            <option selected readonly disabled> Select Product </option>
+                        </select required><br>
+                        <input type="text" id="quantity_${fieldSetCount}" name="quantity_${fieldSetCount}" placeholder="Quantity" required><br>
+                        <select id="office_${fieldSetCount}" name="office_${fieldSetCount}" placeholder="">
+                            <option selected readonly disabled> Select Department </option>
+                        </select required><br>
+                        <textarea id="remarks_${fieldSetCount}" name="remarks_${fieldSetCount}" placeholder="Remarks"></textarea><br>
+                        <label for="qty_${fieldSetCount}">Current Quantity</label>
+                        <input type="text" id="qty_${fieldSetCount}" name="qty_${fieldSetCount}" placeholder="Current Quantity" readonly ><br>
+                        <hr>
+                    `;
 
                     newFieldSet.id = 'fieldSet' + fieldSetCount;
                     newFieldSet.className = 'fieldSet';
                     document.getElementById('dynamicForm').appendChild(newFieldSet);
 
                     populateSelectDropdown(fieldSetCount);
+                    populateSelectDropdownDepartment(fieldSetCount)
                     updateQtyOnChange(fieldSetCount);
 
                     if( document.querySelector('#submit_btn') ){
@@ -159,7 +192,7 @@
             <tr>
                 <td><?= ucwords($order['product_name']) ?></td>
                 <td><?= $order['quantity']; ?></td>
-                <td><?= $order['office']; ?></td>
+                <td><?= $order['department_name'] ?> (<?= $order['department_short_name']?>)</td>
                 <td><?= ucwords($order['ordered_by_name']) ?></td>
                 <td><?= $order['remarks']; ?></td>
                 <td><?= ucfirst(strtolower($order['status']));?></td>

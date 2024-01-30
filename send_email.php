@@ -2,16 +2,26 @@
 require("PHPMailer/src/PHPMailer.php");
 require("PHPMailer/src/SMTP.php");
 
-function sendEmployeeEmail($MAIL_TO, $PASSWORD, $RECEIVER_NAME){
+function sendEmployeeEmail($MAIL_TO, $PASSWORD, $RECEIVER_NAME, $IS_EDIT = false){
     $mailTo = $MAIL_TO;
 
-    $body = "   <h1>Welcome! $MAIL_TO</h1>
-    <p>You have been successfully registered in our system. We're excited to have you on board!</p>
-    <br> <hr>
-    <p>This is you password: $PASSWORD</p>
-    <br> <hr>
-    <p>Best Regards,</p>
-    <p>CVSU GENERAL TRIAS SUPPLY DEPARTMENT </p>";
+    if(!$IS_EDIT){
+        $body = "   <h1>Welcome! $MAIL_TO</h1>
+        <p>You have been successfully registered in our system. We're excited to have you on board!</p>
+        <br> <hr>
+        <p>This is you password: $PASSWORD</p>
+        <br> <hr>
+        <p>Best Regards,</p>
+        <p>CVSU GENERAL TRIAS SUPPLY DEPARTMENT </p>";
+    }else{
+        $body = "   <h1>Welcome! $MAIL_TO</h1>
+        <p>You have been successfully reset your password!</p>
+        <br> <hr>
+        <p>This is you password: $PASSWORD</p>
+        <br> <hr>
+        <p>Best Regards,</p>
+        <p>CVSU GENERAL TRIAS SUPPLY DEPARTMENT </p>";
+    }
 
 
     $mail = new PHPMailer\PHPMailer\PHPMailer();

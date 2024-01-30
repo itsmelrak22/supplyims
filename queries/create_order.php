@@ -33,20 +33,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     foreach ($mappedOrders as $key => $order) {
-        
+        // print_r($order);
+        // exit();
 
         try {
             $status = 'PENDING';
             $ordered_by = $_SESSION['user_data']->client_login ? $_SESSION['user_data']->id : $_SESSION['user_data']['id'];
             // Prepare your SQL statement
-            $stmt = $instance->pdo->prepare("INSERT INTO orders (`product_id`, `quantity`, `office`, `remarks`, `status`, `ordered_by`) VALUES (:product_id, :quantity, :office, :remarks, :status, :ordered_by)");
+            $stmt = $instance->pdo->prepare("INSERT INTO orders (`product_id`, `quantity`,  `remarks`, `status`, `department_id`, `ordered_by`) VALUES (:product_id, :quantity, :remarks, :status, :office ,:ordered_by)");
 
             // Bind parameters to your SQL statement
             $stmt->bindParam(':product_id', $order['id']);
             $stmt->bindParam(':quantity', $order['quantity']);
-            $stmt->bindParam(':office', $order['office']);
             $stmt->bindParam(':remarks', $order['remarks']);
             $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':office', $order['office']);
             $stmt->bindParam(':ordered_by', $ordered_by);
             $stmt->execute();
 

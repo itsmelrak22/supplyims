@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $barcodeId = $_POST['barcodeId'];
     $productName = $_POST['productName'];
     $productGroup = $_POST['productGroup'];
+    $unit_id = $_POST['unit_id'];
     $qty = $_POST['qty'];
    
 
@@ -33,8 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             // Use prepared statements to prevent SQL injection
-            $stmt = $conn->prepare("INSERT INTO product (`barcodeId`, `productName`, `productGroup`, `qty`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->bind_param("sssiss", $barcodeId, $productName, $productGroup, $qty, $today, $today);
+            $stmt = $conn->prepare("INSERT INTO product (`barcodeId`, `productName`, `productGroup`, `qty`, `unit_id`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssiiss", $barcodeId, $productName, $productGroup, $qty, $unit_id, $today, $today);
 
             // Execute the statement
             if (!$stmt->execute()) {

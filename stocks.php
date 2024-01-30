@@ -26,7 +26,7 @@
 
             <label for="qty">Quantity:</label>
             <input type="number" id="qty" name="qty" min="1" required>
-            <input type="submit" value="Update Product">
+            <input type="submit" value="Update Stocks">
         </form>
     </div> 
 
@@ -65,31 +65,8 @@ if ($result->num_rows > 0) {
         $updateProduct[] = $row;
     }
 }
-?><?php if (!empty($updateProduct)): ?>
-        <table>
-            <tr>
-                <th>Product ID</th>
-                <th>Supply Name</th>
-                <th>Category</th>
-                <th>Quantity</th>
-                <th>Date Created</th>
-            </tr>
-            <?php foreach ($updateProduct as $update): ?>
-                <tr>
-                    <td><?php echo $update['barcodeId']; ?></td>
-                    <td><?php echo $update['productName']; ?></td>
-                    <td><?php echo $update['productGroup']; ?></td>
-                    <td><?php echo $update['qty']; ?></td>
-                    <td><?php echo $update['created_at']; ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p>No product list available.</p>
-    <?php endif; ?>
-    </div> 
-     
-  </div>
+?>
+
 
   <script>
    let sidebar = document.querySelector(".sidebar");
