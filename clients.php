@@ -47,7 +47,6 @@
             <tr>
                 <th>Employee ID</th>
                 <th>Name</th>
-                <th>Contact</th>
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Actions</th>
@@ -56,13 +55,12 @@
             <tr>
                 <td><?= $client['employee_id']; ?></td>
                 <td><?= $client['name']; ?></td>
-                <td><?= $client['contact']; ?></td>
                 <td><?= $client['created_at']; ?></td>
                 <td><?= $client['updated_at']; ?></td>
                 <td>
                     <form action="queries/delete_client.php" method="post">
                         <input type="hidden" name="employee_id" value="<?= $client['id']; ?>">
-                        <input style="background-color: red;" type="submit" value="Delete">
+                        <input style="background-color: #004b23;" type="submit" value="Delete">
                     </form>
                 </td>
             </tr>

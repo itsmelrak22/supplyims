@@ -23,7 +23,7 @@
       <div class="sales-boxes">
 
       <div class="recent-sales box">
-          <div class="title">Import Product
+          <div class="title">
             <div class="sales-details">
               <div class="">
               <span>Start Date: <input type="text" id="startdate"></span>
@@ -35,7 +35,7 @@
         <br>
  
         <div class="recent-sales box">
-          <div class="title">Import Product
+          <div class="title">Incoming Supply  
             <div class="sales-details">
               <div class=""></div>
               <div class="button" onclick="pdfGenerate('IN')">
@@ -47,7 +47,7 @@
 
         <br>
         <div class="recent-sales box">
-          <div class="title">Release Product
+          <div class="title">Outgoing Supply
             <div class="sales-details">
               <div class=""></div>
               <div class="button" onclick="pdfGenerate('OUT')">

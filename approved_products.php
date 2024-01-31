@@ -59,14 +59,14 @@
                                 <input type="hidden" name="product_id" value="<?= $order['product_id']; ?>">
                                 <input type="hidden" name="ordered_quantity" value="<?= $order['quantity']; ?>">
                                 <input type="hidden" name="status" value="CLAIMED">
-                                <input style="background-color: #0197CB;" type="submit" value="CLAIMED">
+                                <input style="background-color: #38b000;" type="submit" value="CLAIMED">
                             </form>
                             <form action="queries/update_order.php" method="post">
                                 <input type="hidden" name="order_id" value="<?= $order['id']; ?>">
                                 <input type="hidden" name="product_id" value="<?= $order['product_id']; ?>">
                                 <input type="hidden" name="ordered_quantity" value="<?= $order['quantity']; ?>">
                                 <input type="hidden" name="status" value="PENDING">
-                                <input style="background-color: #b94453;" type="submit" value="CANCEL">
+                                <input style="background-color: #004b23;" type="submit" value="CANCEL">
                             </form>
                         <?php
                             }

@@ -17,14 +17,14 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Setting</span>
+        <span class="dashboard">Change Password</span>
       </div>
       
     </nav>
 
     <div class="home-content">
       <div class="form-container">
-      <h2>CHANGE PASSWORD</h2>
+      <h2>Change Password</h2>
 
       <form  method="post" id="client_form">
             <label for="new_password">New Password:</label>

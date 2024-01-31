@@ -16,14 +16,14 @@
     <nav>
       <div class="sidebar-button">
         <i class='bx bx-menu sidebarBtn'></i>
-        <span class="dashboard">Orders</span>
+        <span class="dashboard">Request</span>
       </div>
     </nav>
 
 <div class="container">
     <?php if( isset($_SESSION['user_data']->client_login) ) {?>   
         <div class="form-container left">
-            <h2>Order Form</h2>
+            <h2>Request Form</h2>
             <form class="order-form" action="queries/create_order.php" method="post">
                 <div id="submit_btn" style="display: none;">
                     <input type="submit" value="Submit">
@@ -216,13 +216,13 @@
                                     <input type="hidden" name="product_id" value="<?= $order['product_id']; ?>">
                                     <input type="hidden" name="ordered_quantity" value="<?= $order['quantity']; ?>">
                                     <input type="hidden" name="status" value="APPROVED">
-                                    <input style="background-color: green;" type="submit" value="APRROVE">
+                                    <input style="background-color: #38b000;" type="submit" value="APRROVE">
                                 </form>
  
                                 <form action="queries/update_order.php" method="post">
                                     <input type="hidden" name="order_id" value="<?= $order['id']; ?>">
                                     <input type="hidden" name="status" value="REJECTED">
-                                    <input style="background-color: red;" type="submit" value="REJECT">
+                                    <input style="background-color: #004b23;" type="submit" value="REJECT">
                                 </form>
                             <?php   } ?>
  

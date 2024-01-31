@@ -5,7 +5,7 @@
             <li>
                 <a href="orders.php">
                     <i class='bx bx-cart'></i>
-                    <span class="links_name">Orders</span>
+                    <span class="links_name">Request</span>
                 </a>
             </li>
 
@@ -19,8 +19,8 @@
                 </li>
                 <li>
                     <a href="barcode.php">
-                        <i class='bx bx-store'></i>
-                        <span class="links_name">Add Supply</span>
+                    <i class='bx bxs-package' ></i>                    
+                    <span class="links_name">Add Supply</span>
                     </a>
                 </li>
                 <li>
@@ -57,28 +57,28 @@
                 
                 <li>
                     <a href="setting.php">
-                        <i class='bx bx-cog'></i>
-                        <span class="links_name">Setting</span>
+                            <i class='bx bx-cog'></i>
+                        <span class="links_name">Settings</span>
                     </a>
                 </li>
                 
                 <li>
                     <a href="csvImporter.php">
-                        <i class='bx bx-cog'></i>
+                        <i class='bx bx-import' ></i>
                         <span class="links_name">CSV Importer</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="departments.php">
-                        <i class='bx bx-box'></i>
+                    <i class='bx bx-building' ></i>
                         <span class="links_name">Departments</span>
                     </a>
                 </li>
 
                 <li>
                     <a href="units.php">
-                        <i class='bx bx-box'></i>
+                    <i class='bx bxs-layer'></i>
                         <span class="links_name">Units</span>
                     </a>
                 </li>
@@ -87,7 +87,7 @@
             <?php } else {?>
                 <li>
                     <a href="changePassword.php">
-                        <i class='bx bx-box'></i>
+                    <i class='bx bx-cog'></i>
                         <span class="links_name">Change Password</span>
                     </a>
                 </li>

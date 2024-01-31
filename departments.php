@@ -59,10 +59,10 @@
                 <td><?= $value['name']; ?></td>
                 <td><?= $value['short_name']; ?></td>
                 <td>
-                    <a href="department-edit.php?department_id=<?=$value['id'] ?>"> <button type="button" style="background-color: blue; width: 100%;">Edit</button> </a>
+                    <a href="department-edit.php?department_id=<?=$value['id'] ?>"> <button type="button" style="background-color: #38b000; width: 100%;">Edit</button> </a>
                     <form method="post" style="margin-top: 2px;">
                         <input type="hidden" name="id" value="<?= $value['id']; ?>">
-                        <input style="background-color: red;" type="submit" name="deleteDepartment" value="Delete">
+                        <input style="background-color: #004b23;" type="submit" name="deleteDepartment" value="Delete">
                     </form>
                 </td>
             </tr>
